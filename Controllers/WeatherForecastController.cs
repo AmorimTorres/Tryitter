@@ -8,7 +8,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "BalmyYYYYY", "Hot", "Sweltering", "Scorching"
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
