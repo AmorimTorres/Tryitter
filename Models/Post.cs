@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Rede_Social_Da_Galera___Tryitter.Models
 {
@@ -10,6 +11,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         [MaxLength(300)]
         public string? PostContent { get; set; }
         public int AccountId { get; set; }
+        [JsonIgnore]
         public Account? Account { get; set; } 
     }
 }
