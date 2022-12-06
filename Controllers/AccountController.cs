@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
 
@@ -35,6 +36,17 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             }
             return Ok(account);
         }
+        [HttpGet("posts")]
+        public ActionResult<IEnumerable<Account>> GetAccountsWithPosts() 
+        {
+            var accounts = _context.Accounts.Include(p => p.Posts).ToList();
+            if (accounts is null)
+            {
+                return NotFound();
+            }
+            return Ok(accounts);
+        }
+
         [HttpPost]
         public ActionResult<Account> CreateAccount(Account account)
         {
