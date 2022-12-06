@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
 
@@ -46,6 +47,31 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _context.Students.Add(student);
             _context.SaveChanges();
             return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, student);
+        }
+        [HttpPut]
+        public ActionResult UpdateStudent(int id, Student student)
+        {
+            if (student.StudentId != id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(student).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+        [HttpDelete]
+        public ActionResult<Student> DeleteStudent(int id)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.StudentId == id);
+            if (student is null)
+            {
+                return NotFound("No student was found.");
+            }
+            _context.Students.Remove(student);
+            _context.SaveChanges();
+
+            return Ok(student);
         }
     }
 }

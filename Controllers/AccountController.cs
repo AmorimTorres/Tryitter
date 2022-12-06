@@ -58,5 +58,29 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _context.SaveChanges();
             return new CreatedAtRouteResult("GetAccount", new { id = account.AccountId }, account);
         }
+        [HttpPut]
+        public ActionResult UpdateAccount(int id, Account account)
+        {
+            if (account.AccountId != id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(account).State = EntityState.Modified;
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public ActionResult<Account> DeleteAccount(int id)
+        {
+            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == id);
+            if (account is null) 
+            {
+                return NotFound();
+            }
+            _context.Accounts.Remove(account);
+            _context.SaveChanges();
+            return Ok(account);
+        }
     }
 }
