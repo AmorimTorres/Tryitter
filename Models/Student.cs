@@ -12,6 +12,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         public string? StudentEmail { get; set; }
         public string? CourseModule { get; set; }
         public string? Status { get; set; }
+        public string? Password { get; set; }
         public int AccountId { get; set; }
         public Account? Account { get; set; }
     }
