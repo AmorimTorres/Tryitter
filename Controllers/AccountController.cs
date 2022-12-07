@@ -12,9 +12,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     {
         private readonly IUnitOfWork _uow;
 
-        public AccountController(IUnitOfWork context)
+        public AccountController(IUnitOfWork uow)
         {
-            _uow = context;
+            _uow = uow;
         }
 
         [HttpGet]

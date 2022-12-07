@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
+using Rede_Social_Da_Galera___Tryitter.Repository;
 
 namespace Rede_Social_Da_Galera___Tryitter.Controllers
 {
@@ -9,15 +10,15 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public PostController(AppDbContext context)
+        private readonly IUnitOfWork _uow;
+        public PostController(IUnitOfWork context)
         {
-            _context = context;
+            _uow = context;
         }
         [HttpGet]
         public ActionResult<IEnumerable<Post>> GetPosts()
         {
-            var posts = _context.Posts.ToList();
+            var posts = _uow.PostRepository.GetAll().ToList();
             if (posts is null)
             {
                 return NotFound();
@@ -27,7 +28,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("{id:int}", Name = "GetPosts")]
         public ActionResult<Post> GetPostById(int id)
         {
-            var post = _context.Posts.FirstOrDefault(p => p.PostId == id);
+            var post = _uow.PostRepository.GetById(p => p.PostId == id);
             if (post is null) 
             {
                 return NotFound();
@@ -37,12 +38,8 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpPost]
         public ActionResult<Post> CreatePost(Post post) 
         {
-            if (post is null)
-            {
-                return BadRequest();
-            }
-            _context.Posts.Add(post);
-            _context.SaveChanges();
+            _uow.PostRepository.Add(post);
+            _uow.Commit();
             return new CreatedAtRouteResult("GetPosts", new { id = post.PostId }, post);
         }
         [HttpPut]
@@ -52,20 +49,20 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(post).State = EntityState.Modified;
-            _context.SaveChanges();
+            _uow.PostRepository.Update(post);
+            _uow.Commit();
             return NoContent();
         }
         [HttpDelete]
         public ActionResult<Post> DeletePost(int id) 
         {
-            var post = _context.Posts.FirstOrDefault(p => p.PostId == id);
+            var post = _uow.PostRepository.GetById(p => p.PostId == id);
             if (post is null)
             {
                 return NotFound();
             }
-            _context.Posts.Remove(post); 
-            _context.SaveChanges();
+            _uow.PostRepository.Delete(post); 
+            _uow.Commit();
             return Ok(post);
         }
 

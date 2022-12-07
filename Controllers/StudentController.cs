@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
+using Rede_Social_Da_Galera___Tryitter.Repository;
 
 namespace Rede_Social_Da_Galera___Tryitter.Controllers
 {
@@ -9,17 +10,17 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public StudentController(AppDbContext context)
+        public StudentController(IUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Student>> GetStudents()
         {
-            var students = _context.Students.ToList();
+            var students = _uow.StudentRepository.GetAll().ToList();
             if (students is null)
             {
                 return NotFound("No student was found.");
@@ -30,7 +31,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("{id:int}", Name  = "GetStudent")]
         public ActionResult<Student> GetStudentById(int id)
         {
-            var student = _context.Students.FirstOrDefault(s => s.StudentId == id);
+            var student = _uow.StudentRepository.GetById(s => s.StudentId == id);
             if (student is null)
             {
                 return NotFound("No student was found.");
@@ -40,12 +41,8 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpPost]
         public ActionResult<Student> CreateStudent(Student student)
         {
-            if (student is null)
-            {
-                return BadRequest();
-            }
-            _context.Students.Add(student);
-            _context.SaveChanges();
+            _uow.StudentRepository.Add(student);
+            _uow.Commit();
             return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, student);
         }
         [HttpPut]
@@ -55,21 +52,21 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(student).State = EntityState.Modified;
-            _context.SaveChanges();
+            _uow.StudentRepository.Update(student);
+            _uow.Commit();
 
             return NoContent();
         }
         [HttpDelete]
         public ActionResult<Student> DeleteStudent(int id)
         {
-            var student = _context.Students.FirstOrDefault(s => s.StudentId == id);
+            var student = _uow.StudentRepository.GetById(s => s.StudentId == id);
             if (student is null)
             {
                 return NotFound("No student was found.");
             }
-            _context.Students.Remove(student);
-            _context.SaveChanges();
+            _uow.StudentRepository.Delete(student);
+            _uow.Commit();
 
             return Ok(student);
         }
