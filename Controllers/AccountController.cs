@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
+using Rede_Social_Da_Galera___Tryitter.Repository;
 
 namespace Rede_Social_Da_Galera___Tryitter.Controllers
 {
@@ -9,17 +10,17 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public AccountController(AppDbContext context)
+        public AccountController(IUnitOfWork context)
         {
-            _context = context;
+            _uow = context;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Account>> GetAccounts() 
         {
-            var accounts = _context.Accounts.ToList();
+            var accounts = _uow.AccountRepository.GetAll().ToList();
             if (accounts is null)
             {
                 return NotFound();
@@ -29,7 +30,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("{id:int}", Name = "GetAccount")]
         public ActionResult<Account> GetAccountById(int id)
         {
-            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == id);
+            var account = _uow.AccountRepository.GetById(a => a.AccountId == id);
             if (account is null)
             {
                 return NotFound();
@@ -39,7 +40,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("posts")]
         public ActionResult<IEnumerable<Account>> GetAccountsWithPosts() 
         {
-            var accounts = _context.Accounts.Include(p => p.Posts).ToList();
+            var accounts = _uow.AccountRepository.GetAccountPosts();
             if (accounts is null)
             {
                 return NotFound();
@@ -50,12 +51,8 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpPost]
         public ActionResult<Account> CreateAccount(Account account)
         {
-            if (account is null)
-            {
-                return BadRequest();
-            }
-            _context.Accounts.Add(account);
-            _context.SaveChanges();
+            _uow.AccountRepository.Add(account);
+            _uow.Commit();
             return new CreatedAtRouteResult("GetAccount", new { id = account.AccountId }, account);
         }
         [HttpPut]
@@ -65,21 +62,21 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(account).State = EntityState.Modified;
-            _context.SaveChanges();
+            _uow.AccountRepository.Update(account);
+            _uow.Commit();
             return NoContent();
         }
 
         [HttpDelete]
         public ActionResult<Account> DeleteAccount(int id)
         {
-            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == id);
+            var account = _uow.AccountRepository.GetById(a => a.AccountId == id);
             if (account is null) 
             {
                 return NotFound();
             }
-            _context.Accounts.Remove(account);
-            _context.SaveChanges();
+            _uow.AccountRepository.Delete(account);
+            _uow.Commit();
             return Ok(account);
         }
     }
