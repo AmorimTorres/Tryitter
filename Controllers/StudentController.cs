@@ -55,25 +55,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _uow.Commit();
             return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, student);
         }
-
-        //[HttpPost("authenticate")]
-        //public ActionResult<Student> Authenticate(Student student)
-        //{
-        //    UserViewModel userViewModel = new UserViewModel();
-        //    try
-        //    {
-        //        student.Password = new TokenGenerator().Generate();
-
-
- 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //    return userViewModel;
-        //}
-
         [HttpPut]
         public ActionResult UpdateStudent(int id, Student student)
         {
