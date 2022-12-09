@@ -9,7 +9,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
         public StudentRepository(AppDbContext context) : base(context)
         {
         }
-
         public async Task<IEnumerable<Student>> GetStudentsPosts()
         {
             return await GetAll().Include(p => p.Posts).ToListAsync();

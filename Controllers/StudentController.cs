@@ -22,9 +22,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<StudentDTO>> GetStudents()
+        public async Task<ActionResult<IEnumerable<StudentDTO>>> GetStudents()
         {
-            var students = _uow.StudentRepository.GetAll().ToList();
+            var students = await _uow.StudentRepository.GetAll().ToListAsync();
             if (students is null)
             {
                 return NotFound("No student was found.");
@@ -34,9 +34,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         }
 
         [HttpGet("{id:int}", Name  = "GetStudent")]
-        public ActionResult<Student> GetStudentById(int id)
+        public async Task<ActionResult<Student>> GetStudentById(int id)
         {
-            var student = _uow.StudentRepository.GetById(s => s.StudentId == id);
+            var student = await _uow.StudentRepository.GetById(s => s.StudentId == id);
             if (student is null)
             {
                 return NotFound("No student was found.");
@@ -45,7 +45,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             return Ok(studentDTO);
         }
         [HttpGet("posts")]
-        public ActionResult<IEnumerable<Student>> GetAccountsWithPosts()
+        public async Task<ActionResult<IEnumerable<Student>>> GetAccountsWithPosts()
         {
             var students = _uow.StudentRepository.GetStudentsPosts();
             if (students is null)
@@ -56,34 +56,35 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             return Ok(studentsDTO);
         }
         [HttpPost]
-        public ActionResult<Student> CreateStudent(Student student)
+        public async Task<ActionResult<Student>> CreateStudent(Student student)
         {
             _uow.StudentRepository.Add(student);
-            _uow.Commit();
-            return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, student);
+            await _uow.Commit();
+            var studentDTO = _mapper.Map<StudentDTO>(student);
+            return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, studentDTO);
         }
         [HttpPut]
-        public ActionResult UpdateStudent(int id, Student student)
+        public async Task<ActionResult> UpdateStudent(int id, Student student)
         {
             if (student.StudentId != id)
             {
                 return BadRequest();
             }
             _uow.StudentRepository.Update(student);
-            _uow.Commit();
+            await _uow.Commit();
 
             return NoContent();
         }
         [HttpDelete]
-        public ActionResult<Student> DeleteStudent(int id)
+        public async Task<ActionResult<Student>> DeleteStudent(int id)
         {
-            var student = _uow.StudentRepository.GetById(s => s.StudentId == id);
+            var student = await _uow.StudentRepository.GetById(s => s.StudentId == id);
             if (student is null)
             {
                 return NotFound("No student was found.");
             }
             _uow.StudentRepository.Delete(student);
-            _uow.Commit();
+            await _uow.Commit();
 
             var studentDTO = _mapper.Map<StudentDTO>(student);
 

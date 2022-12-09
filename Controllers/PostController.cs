@@ -16,7 +16,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _uow = context;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Post>> GetPosts()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
             var posts = _uow.PostRepository.GetAll().ToList();
             if (posts is null)
@@ -26,7 +26,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             return Ok(posts);
         }
         [HttpGet("{id:int}", Name = "GetPosts")]
-        public ActionResult<Post> GetPostById(int id)
+        public async Task<ActionResult<Post>> GetPostById(int id)
         {
             var post = _uow.PostRepository.GetById(p => p.PostId == id);
             if (post is null) 
@@ -36,33 +36,33 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             return Ok(post);
         }
         [HttpPost]
-        public ActionResult<Post> CreatePost(Post post) 
+        public async Task<ActionResult<Post>> CreatePost(Post post) 
         {
             _uow.PostRepository.Add(post);
-            _uow.Commit();
+            await _uow.Commit();
             return new CreatedAtRouteResult("GetPosts", new { id = post.PostId }, post);
         }
         [HttpPut]
-        public ActionResult UpdatePost(int id, Post post)
+        public async Task<ActionResult> UpdatePost(int id, Post post)
         {
             if (post.PostId != id)
             {
                 return BadRequest();
             }
             _uow.PostRepository.Update(post);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
         [HttpDelete]
-        public ActionResult<Post> DeletePost(int id) 
+        public async Task<ActionResult<Post>> DeletePost(int id) 
         {
-            var post = _uow.PostRepository.GetById(p => p.PostId == id);
+            var post = await _uow.PostRepository.GetById(p => p.PostId == id);
             if (post is null)
             {
                 return NotFound();
             }
             _uow.PostRepository.Delete(post); 
-            _uow.Commit();
+            await _uow.Commit();
             return Ok(post);
         }
 
