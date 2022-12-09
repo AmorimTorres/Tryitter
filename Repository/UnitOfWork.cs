@@ -29,9 +29,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
             }
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public void Dispose()

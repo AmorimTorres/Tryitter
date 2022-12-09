@@ -4,6 +4,6 @@
     {
         IStudentRepository StudentRepository { get; }
         IPostRepository PostRepository { get; }
-        void Commit();
+        Task Commit();
     }
 }

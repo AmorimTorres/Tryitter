@@ -10,9 +10,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
         {
         }
 
-        public IEnumerable<Student> GetStudentsPosts()
+        public async Task<IEnumerable<Student>> GetStudentsPosts()
         {
-            return GetAll().Include(p => p.Posts);
+            return await GetAll().Include(p => p.Posts).ToListAsync();
         }
     }
 }
