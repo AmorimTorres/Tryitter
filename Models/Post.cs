@@ -10,8 +10,8 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         [Required]
         [MaxLength(300)]
         public string? PostContent { get; set; }
-        public int AccountId { get; set; }
+        public int StudentId { get; set; }
         [JsonIgnore]
-        public Account? Account { get; set; } 
+        public Student? Student { get; set; } 
     }
 }

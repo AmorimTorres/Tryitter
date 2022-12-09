@@ -10,9 +10,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
         {
         }
 
-        public IEnumerable<Student> GetStudentOrderedByModule()
+        public IEnumerable<Student> GetStudentsPosts()
         {
-            return GetAll().OrderBy(m => m.CourseModule).ToList();
+            return GetAll().Include(p => p.Posts);
         }
     }
 }

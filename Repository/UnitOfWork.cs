@@ -4,7 +4,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private AccountRepository _accountRepo;
         private StudentRepository _studentRepo;
         private PostRepository _postRepo;
         public AppDbContext _context;
@@ -19,14 +18,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
             get
             {
                 return _studentRepo = _studentRepo ?? new StudentRepository(_context);
-            }
-        }
-
-        public IAccountRepository AccountRepository
-        {
-            get
-            {
-                return _accountRepo = _accountRepo ?? new AccountRepository(_context);
             }
         }
 

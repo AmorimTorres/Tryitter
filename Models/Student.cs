@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Hosting;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Rede_Social_Da_Galera___Tryitter.Models
 {
     public class Student
     {
+        public Student()
+        {
+            Posts = new Collection<Post>();
+        }
         [Key]
         public int StudentId { get; set; }
         [Required]
@@ -20,8 +26,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         [Required]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
         public string? Password { get; set; }
-        public int AccountId { get; set; }
-        [JsonIgnore]
-        public Account? Account { get; set; }
+        public ICollection<Post>? Posts { get; set; }
     }
 }

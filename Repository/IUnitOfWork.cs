@@ -3,7 +3,6 @@
     public interface IUnitOfWork
     {
         IStudentRepository StudentRepository { get; }
-        IAccountRepository AccountRepository { get; }
         IPostRepository PostRepository { get; }
         void Commit();
     }

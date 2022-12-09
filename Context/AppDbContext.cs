@@ -9,7 +9,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public AppDbContext() { }
         public DbSet<Student> Students { get; set; }
-        public DbSet<Account> Accounts { get; set; }
         public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

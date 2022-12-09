@@ -38,6 +38,16 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             }
             return Ok(student);
         }
+        [HttpGet("posts")]
+        public ActionResult<IEnumerable<Student>> GetAccountsWithPosts()
+        {
+            var accounts = _uow.StudentRepository.GetStudentsPosts();
+            if (accounts is null)
+            {
+                return NotFound();
+            }
+            return Ok(accounts);
+        }
         [HttpPost]
         public ActionResult<Student> CreateStudent(Student student)
         {

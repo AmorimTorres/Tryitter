@@ -4,6 +4,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Repository
 {
     public interface IStudentRepository : IRepository<Student>
     {
-        IEnumerable<Student> GetStudentOrderedByModule();
+        IEnumerable<Student> GetStudentsPosts();
     }
 }
