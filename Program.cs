@@ -1,5 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Rede_Social_Da_Galera___Tryitter.Context;
+using Rede_Social_Da_Galera___Tryitter.DTOS.Mappings;
 using Rede_Social_Da_Galera___Tryitter.Repository;
 using System.Text.Json.Serialization;
 
@@ -19,6 +22,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 

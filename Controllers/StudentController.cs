@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
+using Rede_Social_Da_Galera___Tryitter.DTOS;
 using Rede_Social_Da_Galera___Tryitter.Models;
 using Rede_Social_Da_Galera___Tryitter.Repository;
 
@@ -11,21 +13,24 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public StudentController(IUnitOfWork uow)
+        public StudentController(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Student>> GetStudents()
+        public ActionResult<IEnumerable<StudentDTO>> GetStudents()
         {
             var students = _uow.StudentRepository.GetAll().ToList();
             if (students is null)
             {
                 return NotFound("No student was found.");
             }
-            return Ok(students);
+            var studentsDTO = _mapper.Map<List<StudentDTO>>(students);
+            return Ok(studentsDTO);
         }
 
         [HttpGet("{id:int}", Name  = "GetStudent")]
@@ -36,17 +41,19 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             {
                 return NotFound("No student was found.");
             }
-            return Ok(student);
+            var studentDTO = _mapper.Map<StudentDTO>(student);
+            return Ok(studentDTO);
         }
         [HttpGet("posts")]
         public ActionResult<IEnumerable<Student>> GetAccountsWithPosts()
         {
-            var accounts = _uow.StudentRepository.GetStudentsPosts();
-            if (accounts is null)
+            var students = _uow.StudentRepository.GetStudentsPosts();
+            if (students is null)
             {
                 return NotFound();
             }
-            return Ok(accounts);
+            var studentsDTO = _mapper.Map<List<StudentDTO>>(students);
+            return Ok(studentsDTO);
         }
         [HttpPost]
         public ActionResult<Student> CreateStudent(Student student)
@@ -78,7 +85,9 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _uow.StudentRepository.Delete(student);
             _uow.Commit();
 
-            return Ok(student);
+            var studentDTO = _mapper.Map<StudentDTO>(student);
+
+            return Ok(studentDTO);
         }
     }
 }
