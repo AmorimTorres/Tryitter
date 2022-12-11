@@ -42,7 +42,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             await _uow.Commit();
             return new CreatedAtRouteResult("GetPosts", new { id = post.PostId }, post);
         }
-        [HttpPut]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdatePost(int id, Post post)
         {
             if (post.PostId != id)
