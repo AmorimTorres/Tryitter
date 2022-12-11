@@ -18,7 +18,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         [Required]
         [MaxLength(80)]
         public string? StudentEmail { get; set; }
-        [Required]
         [MaxLength(50)]
         public string? CourseModule { get; set; }
         [MaxLength(80)]
@@ -27,5 +26,10 @@ namespace Rede_Social_Da_Galera___Tryitter.Models
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
         public string? Password { get; set; }
         public ICollection<Post>? Posts { get; set; }
+
+        public static implicit operator Student(Task<Student> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
