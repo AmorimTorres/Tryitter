@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Rede_Social_Da_Galera___Tryitter.Constants;
+using Rede_Social_Da_Galera___Tryitter.Migrations;
 using Rede_Social_Da_Galera___Tryitter.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,7 +30,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Services
         static ClaimsIdentity AddClaims()
         {
             var claims = new ClaimsIdentity();
-
             return claims;
         }
     }

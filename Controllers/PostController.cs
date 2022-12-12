@@ -18,7 +18,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            var posts = _uow.PostRepository.GetAll().ToList();
+            var posts = await _uow.PostRepository.GetAll().ToListAsync();
             if (posts is null)
             {
                 return NotFound();
@@ -28,7 +28,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("{id:int}", Name = "GetPosts")]
         public async Task<ActionResult<Post>> GetPostById(int id)
         {
-            var post = _uow.PostRepository.GetById(p => p.PostId == id);
+            var post = await _uow.PostRepository.GetById(p => p.PostId == id);
             if (post is null) 
             {
                 return NotFound();
@@ -53,7 +53,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             await _uow.Commit();
             return NoContent();
         }
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult<Post>> DeletePost(int id) 
         {
             var post = await _uow.PostRepository.GetById(p => p.PostId == id);

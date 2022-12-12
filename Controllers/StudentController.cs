@@ -21,7 +21,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             _uow = uow;
             _mapper = mapper;
         }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StudentDTO>>> GetStudents()
         {
@@ -33,7 +32,6 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             var studentsDTO = _mapper.Map<List<StudentDTO>>(students);
             return Ok(studentsDTO);
         }
-
         [HttpGet("{id:int}", Name = "GetStudent")]
         public async Task<ActionResult<Student>> GetStudentById(int id)
         {
@@ -77,7 +75,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
 
             return NoContent();
         }
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult<Student>> DeleteStudent(int id)
         {
             var student = await _uow.StudentRepository.GetById(s => s.StudentId == id);
