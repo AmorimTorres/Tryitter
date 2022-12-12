@@ -48,13 +48,13 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
         [HttpGet("posts")]
         public async Task<ActionResult<IEnumerable<Student>>> GetAccountsWithPosts()
         {
-            var students = _uow.StudentRepository.GetStudentsPosts();
+            var students = await _uow.StudentRepository.GetStudentsPosts();
             if (students is null)
             {
                 return NotFound();
             }
             var studentsDTO = _mapper.Map<List<StudentDTO>>(students);
-            return Ok(studentsDTO);
+            return Ok(students);
         }
         [HttpPost]
         public async Task<ActionResult<Student>> CreateStudent(Student student)
