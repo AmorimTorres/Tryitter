@@ -54,7 +54,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
                 return NotFound();
             }
             var studentsDTO = _mapper.Map<List<StudentDTO>>(students);
-            return Ok(students);
+            return Ok(studentsDTO);
         }
         [HttpPost]
         public async Task<ActionResult<Student>> CreateStudent(Student student)
@@ -64,7 +64,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             var studentDTO = _mapper.Map<StudentDTO>(student);
             return new CreatedAtRouteResult("GetStudent", new { id = student.StudentId }, studentDTO);
         }
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateStudent(int id, Student student)
         {
