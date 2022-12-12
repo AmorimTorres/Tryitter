@@ -1,6 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Rede_Social_Da_Galera___Tryitter.Constants;
+using Rede_Social_Da_Galera___Tryitter.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Rede_Social_Da_Galera___Tryitter.Services
@@ -12,6 +14,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
+                Subject = AddClaims(),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenConstants.Secret)),
                     SecurityAlgorithms.HmacSha256Signature
@@ -21,6 +24,13 @@ namespace Rede_Social_Da_Galera___Tryitter.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        static ClaimsIdentity AddClaims()
+        {
+            var claims = new ClaimsIdentity();
+
+            return claims;
         }
     }
 }
