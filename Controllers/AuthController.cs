@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rede_Social_Da_Galera___Tryitter.AuthModels;
+using Rede_Social_Da_Galera___Tryitter.DTOS;
 using Rede_Social_Da_Galera___Tryitter.Models;
 using Rede_Social_Da_Galera___Tryitter.Repository;
 using Rede_Social_Da_Galera___Tryitter.Services;
@@ -25,15 +26,17 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             StudentViewModel studentViewModel = new StudentViewModel();
             try
             {
-                studentViewModel.Student = await _uow.StudentRepository.GetById(s => s.StudentId == student.StudentId);
-                if (studentViewModel.Student is null)
+                var getStudent = await _uow.StudentRepository.GetById(s => s.StudentId == student.StudentId);
+                if (getStudent is null)
                 {
                     return NotFound("No student was found.");
                 }
 
+                var studentDTO = _mapper.Map<StudentDTO>(getStudent);
+
                 studentViewModel.Token = new TokenGenerator().Generate();
 
-                studentViewModel.Student.Password = string.Empty;
+                studentViewModel.Student = studentDTO;
             }
             catch (Exception ex)
             {
