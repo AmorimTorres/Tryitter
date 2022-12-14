@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.Models;
 using Rede_Social_Da_Galera___Tryitter.Repository;
+using System.Security.Claims;
 
 namespace Rede_Social_Da_Galera___Tryitter.Controllers
 {
@@ -42,12 +44,21 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
             await _uow.Commit();
             return new CreatedAtRouteResult("GetPosts", new { id = post.PostId }, post);
         }
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdatePost(int id, Post post)
         {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            var getStudentId = Convert.ToInt16(claims.Claims.FirstOrDefault(c => c.Type == "StudentId").Value);
+
+            if (getStudentId != post.StudentId)
+            {
+                return BadRequest("Usuário não autorizado");
+            }
+
             if (post.PostId != id)
             {
-                return BadRequest();
+                return BadRequest("Post não encontrado");
             }
             _uow.PostRepository.Update(post);
             await _uow.Commit();

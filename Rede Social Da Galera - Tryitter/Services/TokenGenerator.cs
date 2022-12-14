@@ -10,12 +10,12 @@ namespace Rede_Social_Da_Galera___Tryitter.Services
 {
     public class TokenGenerator
     {
-        public string Generate()
+        public string Generate(Student student)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = AddClaims(),
+                Subject = AddClaims(student),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenConstants.Secret)),
                     SecurityAlgorithms.HmacSha256Signature
@@ -27,9 +27,10 @@ namespace Rede_Social_Da_Galera___Tryitter.Services
             return tokenHandler.WriteToken(token);
         }
 
-        static ClaimsIdentity AddClaims()
+        static ClaimsIdentity AddClaims(Student student)
         {
             var claims = new ClaimsIdentity();
+            claims.AddClaim(new Claim("StudentId", student.StudentId.ToString()));
             return claims;
         }
     }

@@ -6,6 +6,7 @@ using Rede_Social_Da_Galera___Tryitter.Context;
 using Rede_Social_Da_Galera___Tryitter.DTOS;
 using Rede_Social_Da_Galera___Tryitter.Models;
 using Rede_Social_Da_Galera___Tryitter.Repository;
+using System.Security.Claims;
 
 namespace Rede_Social_Da_Galera___Tryitter.Controllers
 {

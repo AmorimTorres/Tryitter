@@ -34,7 +34,7 @@ namespace Rede_Social_Da_Galera___Tryitter.Controllers
 
                 var studentDTO = _mapper.Map<StudentDTO>(getStudent);
 
-                studentViewModel.Token = new TokenGenerator().Generate();
+                studentViewModel.Token = new TokenGenerator().Generate(student);
 
                 studentViewModel.Student = studentDTO;
             }
