@@ -7,10 +7,10 @@ using System.Net.Http.Json;
 
 namespace TryitterTests
 {
-    public class StudentTest : IClassFixture<StudentTestContext<Program>>
+    public class StudentTest : IClassFixture<TestContext<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
-        public StudentTest(StudentTestContext<Program> factory)
+        public StudentTest(TestContext<Program> factory)
         {
             _factory = factory;
         }
